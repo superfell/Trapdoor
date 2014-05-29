@@ -48,12 +48,8 @@ static const float GDGradientShadowStart    = 0.3333;   // 33.33%
 @implementation GDGradient
 
 // Function for blending one color with another (affine combination):
-static void highlightColorWithFractionOfColor(float color[4], float fraction, const float highlight[4])
-{
-    int i;
-
-    for (i = 0; i < 4; i++)
-    {
+static void highlightColorWithFractionOfColor(CGFloat color[4], CGFloat fraction, const CGFloat highlight[4]) {
+    for (int i = 0; i < 4; i++) {
         color[i] = fraction * highlight[i] + (1.0 - fraction) * color[i];
     }
 }
@@ -62,21 +58,19 @@ static void highlightColorWithFractionOfColor(float color[4], float fraction, co
 static void gradientShadingFunction
 (
     void        *info, 
-    const float *in, 
-    float       *out
+    const CGFloat *in, 
+    CGFloat       *out
 )
 {
     GDGradient* gradient    = (GDGradient *)info;
-    float       fraction    = (*in);
+    CGFloat     fraction    = (*in);
 
     // Return components:
     [gradient getGradientColorComponents: out forFraction: fraction];
 }
 
-- init 
-{
-    if (self = [super init])
-    {
+- init {
+    if (self = [super init]) {
         [[[NSColor highlightColor] colorUsingColorSpaceName: NSCalibratedRGBColorSpace] getComponents: m_highlight];
         [[[NSColor shadowColor] colorUsingColorSpaceName: NSCalibratedRGBColorSpace] getComponents: m_shadow];
 
@@ -86,9 +80,9 @@ static void gradientShadingFunction
         // Create shading function object:
         m_shadingFunction = CGFunctionCreate (self,         // info
                                               1,                              // domainDimension
-                                              (const float[2]) { 0, 1 },      // domain
+                                              (const CGFloat[2]) { 0, 1 },      // domain
                                               4,                              // rangeDimension
-                                              (const float[8])                // range
+                                              (const CGFloat[8])                // range
                                               {
                                                   0, 1,
                                                   0, 1,
@@ -132,7 +126,7 @@ static void gradientShadingFunction
 
 // Note: Original implementation was written using NSColor methods, but this
 //       is very slow since this method is called many times during display.
-- (void)getGradientColorComponents:(float[4])components forFraction:(float)fraction
+- (void)getGradientColorComponents:(CGFloat[4])components forFraction:(CGFloat)fraction
 {
     NSColor*    color       = [self color];
 
@@ -142,7 +136,7 @@ static void gradientShadingFunction
     // Blend shadow color, if needed:
     if (fraction >= GDGradientShadowStart)
     {
-        float   shadow      = GDGradientShadowMax * GDGradientShadowMax * (fraction - GDGradientShadowStart) / (1.0 - GDGradientShadowStart);
+        CGFloat   shadow      = GDGradientShadowMax * GDGradientShadowMax * (fraction - GDGradientShadowStart) / (1.0 - GDGradientShadowStart);
 
         highlightColorWithFractionOfColor(components, shadow, m_shadow);
     }
@@ -150,21 +144,21 @@ static void gradientShadingFunction
     // Blend highlight color, if needed:
     if (fraction < GDGradientHighlightEnd)
     {
-        float   highlight   = GDGradientHighlightMax - GDGradientHighlightMax * (fraction / GDGradientHighlightEnd);
+        CGFloat   highlight   = GDGradientHighlightMax - GDGradientHighlightMax * (fraction / GDGradientHighlightEnd);
 
         highlightColorWithFractionOfColor(components, highlight, m_highlight);
     }
 #endif
 }
 
-- (NSColor *)gradientColorForFraction:(float)fraction
+- (NSColor *)gradientColorForFraction:(CGFloat)fraction
 {
     struct
     {
-        float red;
-        float green;
-        float blue;
-        float alpha;
+        CGFloat red;
+        CGFloat green;
+        CGFloat blue;
+        CGFloat alpha;
     }
     color;
 
