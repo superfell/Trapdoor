@@ -38,7 +38,7 @@
 	NSObject<NewServerAdded>*target;
 }
 
-- (void)showAddServer:(NSWindow *)parentWindow finishedTarget:(NSObject<NewServerAdded> *)t;
+- (IBAction)showAddServer:(NSWindow *)parentWindow finishedTarget:(NSObject<NewServerAdded> *)t;
 
 - (IBAction)addServer:(id)sender;
 - (IBAction)cancelAddServer:(id)sender;
