@@ -75,7 +75,7 @@ OSStatus keychainCallback (SecKeychainEvent keychainEvent, SecKeychainCallbackIn
 		[welcomeWindow makeKeyAndOrderFront:self];
 	OSStatus s = SecKeychainAddCallback(keychainCallback, kSecAddEventMask | kSecDeleteEventMask | kSecUpdateEventMask, self);
 	if (s != noErr)
-		NSLog(@"Trapdoor - unable to register for keychain changes, got error %d", s);
+		NSLog(@"Trapdoor - unable to register for keychain changes, got error %ld", (long)s);
 	
 	// this is needed because if you add TD to the dock, sparkle won't update its icon if the app icon changes.
 	NSImage *currentIcon = [NSImage imageNamed:@"td"];
@@ -153,65 +153,12 @@ OSStatus keychainCallback (SecKeychainEvent keychainEvent, SecKeychainCallbackIn
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:help]];
 }
 
-- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
-	NSLog(@"connection:%@ willSendRequest:%@ redirect:%@", connection, request, redirectResponse);
-	return request;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	NSLog(@"connection:%@ didRR:%@ statusCode:%d", connection, response, [response statusCode]);
-}
-
--(NSURL *)baseInstanceUrl:(ZKSforceClient *)sforce {
-	NSString *idPath = [NSString stringWithFormat:@"/id/%@/%@", [[[sforce currentUserInfo] organizationId] substringToIndex:15], [[[sforce currentUserInfo] userId] substringToIndex:15]];
-	NSURL *authUrl = [sforce authEndpointUrl]; // [NSURL URLWithString:[sforce serverUrl]]; 
-	if ([[authUrl host] caseInsensitiveCompare:@"www.salesforce.com"] == NSOrderedSame)
-		authUrl = [NSURL URLWithString:@"https://login.salesforce.com/"];
-	NSURL *identityUrl = [NSURL URLWithString:idPath relativeToURL:authUrl];
-
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:identityUrl];
-	[request addValue:@"application/xml" forHTTPHeaderField:@"Accept"];	
-	//[request setHTTPShouldHandleCookies:NO];
-	//[request addValue:@"MacTrapdoor" forHTTPHeaderField:@"User-Agent"];
-	//[request addValue:@"*" forHTTPHeaderField:@"Accept-Language"];
-	//[request addValue:@"login.salesforce.com" forHTTPHeaderField:@"Host"];
-	[request addValue:[NSString stringWithFormat:@"OAuth %@", [sforce sessionId]] forHTTPHeaderField:@"Authorization"];
-	
-	NSHTTPURLResponse *resp = nil;
-	NSError *err = nil;
-	NSLog(@"request url : %@", [request URL]);
-	NSLog(@"request headers : \r\n%@", [request allHTTPHeaderFields]);
-
-	NSURLConnection *con = [NSURLConnection connectionWithRequest:request delegate:self];
-	[con start];
-	return nil;
-
-/*
-	NSData *respPayload = [NSURLConnection sendSynchronousRequest:request returningResponse:&resp error:&err];
-	NSLog(@"statusCode:%d", [resp statusCode]);
-	NSLog(@"headers: \r\n%@", [resp allHeaderFields]);
-	NSLog(@"response \r\n%@", [NSString stringWithCString:[respPayload bytes] length:[respPayload length]]);
-	if ([resp statusCode] == 302) {
-		request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[[resp allHeaderFields] objectForKey:@"Location"]]];
-		[request addValue:@"application/xml" forHTTPHeaderField:@"Accept"];	
-		respPayload = [NSURLConnection sendSynchronousRequest:request returningResponse:&resp error:&err];
-	}
-	NSLog(@"response \r\n%@", [NSString stringWithCString:[respPayload bytes] length:[respPayload length]]);
-	zkElement *root = [zkParser parseData:respPayload];
-
-	zkElement *urls = [root childElement:@"urls"];
-	zkElement *ent = [urls childElement:@"enterprise"];
-	NSString *entUrl = [ent stringValue];
-	return [NSURL URLWithString:@"/" relativeToURL:[NSURL URLWithString:entUrl]];*/
-}
-
 - (void)launchSalesforceForClient:(ZKSforceClient *)sforce andCredential:(Credential *)credential {
 	[sforce setCacheDescribes:YES];
 	ZKDescribeSObject *desc = [self describeSomethingWithUrls:sforce];
 	NSString *sUrl = desc != nil ? [desc urlNew] : [sforce serverUrl];
 	NSURL *url = [NSURL URLWithString:sUrl];
-//	NSURL *url = [self baseInstanceUrl:sforce];
-	NSURL * fd = [NSURL URLWithString:[NSString stringWithFormat:@"/secur/frontdoor.jsp?sid=%@", [sforce sessionId]] relativeToURL:url];
+	NSURL *fd  = [NSURL URLWithString:[NSString stringWithFormat:@"/secur/frontdoor.jsp?sid=%@", [sforce sessionId]] relativeToURL:url];
     NSLog(@"final url: %@",url);
 	NSString *bundleIdentifier = [[credential browser] bundleIdentifier];
 	if (bundleIdentifier == nil)
