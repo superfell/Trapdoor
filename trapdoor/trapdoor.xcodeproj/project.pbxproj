@@ -44,6 +44,7 @@
 		F4A1198A0B6862CE00B15DC2 /* zkSaveResult.m in Sources */ = {isa = PBXBuildFile; fileRef = F4A119820B6862CE00B15DC2 /* zkSaveResult.m */; };
 		F4A1198B0B6862CE00B15DC2 /* zkSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F4A119840B6862CE00B15DC2 /* zkSObject.m */; };
 		F4B3C0B80B8D54B3007E32C5 /* NewPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4B3C0B60B8D54B3007E32C5 /* NewPasswordController.m */; };
+		F4C30D3F19382F4A00C377F1 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = F4C30D3E19382F4A00C377F1 /* dsa_pub.pem */; };
 		F4D77E56128502CB00704EE4 /* zkParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D77E55128502CB00704EE4 /* zkParser.m */; };
 		F4D77E5C1285030C00704EE4 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D77E5B1285030C00704EE4 /* libxml2.2.dylib */; };
 		F4F09D4A0B686E2C00C972C4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F09D490B686E2C00C972C4 /* Sparkle.framework */; };
@@ -139,6 +140,7 @@
 		F4A119840B6862CE00B15DC2 /* zkSObject.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = zkSObject.m; path = ../sforce/zkSObject.m; sourceTree = SOURCE_ROOT; };
 		F4B3C0B50B8D54B3007E32C5 /* NewPasswordController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NewPasswordController.h; sourceTree = "<group>"; };
 		F4B3C0B60B8D54B3007E32C5 /* NewPasswordController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = NewPasswordController.m; sourceTree = "<group>"; };
+		F4C30D3E19382F4A00C377F1 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		F4D77E54128502CB00704EE4 /* zkParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zkParser.h; path = ../sforce/zkParser.h; sourceTree = SOURCE_ROOT; };
 		F4D77E55128502CB00704EE4 /* zkParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = zkParser.m; path = ../sforce/zkParser.m; sourceTree = SOURCE_ROOT; };
 		F4D77E5B1285030C00704EE4 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = /usr/lib/libxml2.2.dylib; sourceTree = "<absolute>"; };
@@ -246,6 +248,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F4C30D3E19382F4A00C377F1 /* dsa_pub.pem */,
 				F4F09E000B69B73300C972C4 /* Credits.html */,
 				F4F09DB10B69175500C972C4 /* td.icns */,
 				9766A3BA0B59B4E100C18E5B /* minus-8.png */,
@@ -381,6 +384,7 @@
 				9766A3BD0B59B4E100C18E5B /* plus-8.png in Resources */,
 				F4F09DB20B69175500C972C4 /* td.icns in Resources */,
 				F4F09E010B69B73300C972C4 /* Credits.html in Resources */,
+				F4C30D3F19382F4A00C377F1 /* dsa_pub.pem in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

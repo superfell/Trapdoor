@@ -34,5 +34,7 @@
 	<string>http://www.pocketsoap.com/osx/trapdoor/trapdoor.xml</string>
 	<key>ZKHelpUrl</key>
 	<string>http://www.pocketsoap.com/osx/trapdoor/help/</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
 </dict>
 </plist>
