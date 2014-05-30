@@ -207,12 +207,12 @@ OSStatus keychainCallback (SecKeychainEvent keychainEvent, SecKeychainCallbackIn
 
 - (void)launchSalesforceForClient:(ZKSforceClient *)sforce andCredential:(Credential *)credential {
 	[sforce setCacheDescribes:YES];
-	//ZKDescribeSObject *desc = [self describeSomethingWithUrls:sforce];
-	//NSString *sUrl = desc != nil ? [desc urlNew] : [sforce serverUrl];
-	//NSURL *url = [NSURL URLWithString:sUrl];
-	NSURL *url = [self baseInstanceUrl:sforce];
+	ZKDescribeSObject *desc = [self describeSomethingWithUrls:sforce];
+	NSString *sUrl = desc != nil ? [desc urlNew] : [sforce serverUrl];
+	NSURL *url = [NSURL URLWithString:sUrl];
+//	NSURL *url = [self baseInstanceUrl:sforce];
 	NSURL * fd = [NSURL URLWithString:[NSString stringWithFormat:@"/secur/frontdoor.jsp?sid=%@", [sforce sessionId]] relativeToURL:url];
-
+    NSLog(@"final url: %@",url);
 	NSString *bundleIdentifier = [[credential browser] bundleIdentifier];
 	if (bundleIdentifier == nil)
 		[[NSWorkspace sharedWorkspace] openURL:fd];
@@ -223,6 +223,10 @@ OSStatus keychainCallback (SecKeychainEvent keychainEvent, SecKeychainCallbackIn
 
 - (IBAction)performLogin:(id)sender {
 	Credential *c = [sender representedObject];
+    [self completeLogin:c];
+}
+
+- (void)completeLogin:(Credential *)c {
 	ZKSforceClient *sforce = [self clientForServer:[c server]];
 	@try {
 		ZKLoginResult *lr = [sforce login:[c username] password:[c password]];

@@ -14,6 +14,8 @@
 		9766A3B80B59B45E00C18E5B /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9766A3B70B59B45E00C18E5B /* AppController.m */; };
 		9766A3BC0B59B4E100C18E5B /* minus-8.png in Resources */ = {isa = PBXBuildFile; fileRef = 9766A3BA0B59B4E100C18E5B /* minus-8.png */; };
 		9766A3BD0B59B4E100C18E5B /* plus-8.png in Resources */ = {isa = PBXBuildFile; fileRef = 9766A3BB0B59B4E100C18E5B /* plus-8.png */; };
+		C91F4EF419380ADF008C10C6 /* trapdoor.sdef in Resources */ = {isa = PBXBuildFile; fileRef = C91F4EF319380ADF008C10C6 /* trapdoor.sdef */; };
+		C9E809B719380A8400883138 /* NSObject+ScriptSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E809B619380A8400883138 /* NSObject+ScriptSupport.m */; };
 		F41C2C520B667A4C00947837 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41C2C510B667A4C00947837 /* Security.framework */; };
 		F42557D30C45E9B6008065AE /* zkBaseClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F42557CF0C45E9B6008065AE /* zkBaseClient.m */; };
 		F42557D50C45E9B6008065AE /* ZKPartnerEnvelope.m in Sources */ = {isa = PBXBuildFile; fileRef = F42557D10C45E9B6008065AE /* ZKPartnerEnvelope.m */; };
@@ -79,6 +81,9 @@
 		9766A3B70B59B45E00C18E5B /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		9766A3BA0B59B4E100C18E5B /* minus-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minus-8.png"; sourceTree = "<group>"; };
 		9766A3BB0B59B4E100C18E5B /* plus-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-8.png"; sourceTree = "<group>"; };
+		C91F4EF319380ADF008C10C6 /* trapdoor.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = trapdoor.sdef; sourceTree = "<group>"; };
+		C9E809B519380A8400883138 /* NSObject+ScriptSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+ScriptSupport.h"; sourceTree = "<group>"; };
+		C9E809B619380A8400883138 /* NSObject+ScriptSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ScriptSupport.m"; sourceTree = "<group>"; };
 		F41C2C510B667A4C00947837 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		F42557CE0C45E9B6008065AE /* zkBaseClient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = zkBaseClient.h; path = ../sforce/zkBaseClient.h; sourceTree = SOURCE_ROOT; };
 		F42557CF0C45E9B6008065AE /* zkBaseClient.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = zkBaseClient.m; path = ../sforce/zkBaseClient.m; sourceTree = SOURCE_ROOT; };
@@ -180,6 +185,8 @@
 				F4A0D5BF0BE05A8B00E197F2 /* CredentialEditor.m */,
 				F461295E0BE3E6C400886443 /* NewServerController.h */,
 				F461295F0BE3E6C400886443 /* NewServerController.m */,
+				C9E809B519380A8400883138 /* NSObject+ScriptSupport.h */,
+				C9E809B619380A8400883138 /* NSObject+ScriptSupport.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -246,6 +253,7 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				C91F4EF319380ADF008C10C6 /* trapdoor.sdef */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -366,6 +374,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C91F4EF419380ADF008C10C6 /* trapdoor.sdef in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				9766A3BC0B59B4E100C18E5B /* minus-8.png in Resources */,
@@ -390,6 +399,7 @@
 				F4A119690B68602600B15DC2 /* zkUserInfo.m in Sources */,
 				F4A1196A0B68602600B15DC2 /* zkXmlDeserializer.m in Sources */,
 				F4A1196D0B6860C700B15DC2 /* zkDescribeSObject.m in Sources */,
+				C9E809B719380A8400883138 /* NSObject+ScriptSupport.m in Sources */,
 				F4A119850B6862CE00B15DC2 /* zkChildRelationship.m in Sources */,
 				F4A119860B6862CE00B15DC2 /* zkDescribeField.m in Sources */,
 				F4A119870B6862CE00B15DC2 /* ZKPicklistEntry.m in Sources */,
@@ -462,10 +472,7 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

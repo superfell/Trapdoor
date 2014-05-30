@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="Standard Terminology">
+	<suite name="Standard Suite" code="????" description="Common classes and commands for most applications.">
+		<cocoa name="NSCoreSuite"/>
+		<command name="count" code="corecnte" description="Return the number of elements of a particular class within an object.">
+			<cocoa class="NSCountCommand"/>
+			<direct-parameter description="the object whose elements are to be counted" type="specifier"/>
+			<parameter name="each" code="kocl" description="The class of objects to be counted." type="type" optional="yes">
+				<cocoa key="ObjectClass"/>
+			</parameter>
+			<result description="the number of elements" type="integer"/>
+		</command>
+		<command name="exists" code="coredoex" description="Verify if an object exists.">
+			<cocoa class="NSExistsCommand"/>
+			<direct-parameter description="the object in question" type="specifier"/>
+			<result description="true if it exists, false if not" type="boolean"/>
+		</command>
+	</suite>
+	<suite name="Trapdoor Suite" code="trDR" description="Classes and commands for logging in to Salesforce orgs">
+		<class name="application" code="capp" description="Trapdoor&apos;s top level scripting object.">
+			<cocoa class="NSApplication"/>
+			<element description="List of credentials saved in Trapdoor" type="credential">
+				<cocoa key="credentialsArray"/>
+			</element>
+			<property name="name" code="pnam" description="The name of the application." type="text" access="r"/>
+			<property name="frontmost" code="pisf" description="Is this the frontmost (active) application?" type="boolean" access="r">
+				<cocoa key="isActive"/>
+			</property>
+			<property name="version" code="vers" description="The version of the application." type="text" access="r"/>
+		</class>
+		<class name="credential" code="crED" plural="credentials">
+			<cocoa class="Credential"/>
+			<property name="server" code="srVR" description="The URL of the Salesforce org" type="text" access="r">
+				<cocoa key="credentialServer"/>
+			</property>
+			<property name="username" code="pnam" description="The login username" type="text" access="r">
+				<cocoa key="credentialUsername"/>
+			</property>
+			<property name="alias" code="aLIS" description="The credential alias" type="text" access="r">
+				<cocoa key="credentialComment"/>
+			</property>
+			<responds-to command="login" description="command to log in to the account belonging to the credential">
+				<cocoa method="login:"/>
+			</responds-to>
+		</class>
+		<command name="login" code="sfrlogIN" description="logs into the org specified by the credential">
+			<direct-parameter description="The credential to log in to" type="credential"/>
+		</command>
+	</suite>
+</dictionary>
