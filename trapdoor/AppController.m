@@ -207,6 +207,7 @@ OSStatus keychainCallback (SecKeychainEvent keychainEvent, SecKeychainCallbackIn
 		if ([[c comment] length] > 0)
 			itemTitle = [NSString stringWithFormat:@"%@ - %@", [c comment], [c username]];
 		NSString *shortcut = keyShortCut < 10 ? [NSString stringWithFormat:@"%d", keyShortCut++] : @"";
+        NSAssert(itemTitle != nil, @"ItemTitle shouldn't be nil");
 	    NSMenuItem *newItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:itemTitle action:NULL keyEquivalent:shortcut];
 		[newItem setRepresentedObject:c];
 	    [newItem setTarget:self];
