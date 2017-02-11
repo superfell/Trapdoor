@@ -23,9 +23,25 @@
 #import "zkSoapException.h"
 #import "zkParser.h"
 
+@interface ConnectionDelegate : NSObject<NSURLConnectionDataDelegate> {
+    NSMutableData *data;
+    NSConditionLock *lock;
+    NSError *err;
+}
+-(NSError *)waitForResult;
+-(NSData *)data;
+
+@end
+
 @implementation ZKBaseClient
 
 static NSString *SOAP_NS = @"http://schemas.xmlsoap.org/soap/envelope/";
+
+static NSOperationQueue *delegateQueue;
+
++(void)initialize {
+    delegateQueue = [[NSOperationQueue alloc] init];
+}
 
 - (void)dealloc {
 	[endpointUrl release];
@@ -46,16 +62,34 @@ static NSString *SOAP_NS = @"http://schemas.xmlsoap.org/soap/envelope/";
 	[request setHTTPBody:data];
 	
 	NSHTTPURLResponse *resp = nil;
-	NSError *err = nil;
+	// NSError *err = nil;
 	// todo, support request compression
 	// todo, support response compression
-	NSData *respPayload = [NSURLConnection sendSynchronousRequest:request returningResponse:&resp error:&err];
+    ConnectionDelegate *connDelegate = [[[ConnectionDelegate alloc] init] autorelease];
+    NSURLConnection *c = [[NSURLConnection alloc] initWithRequest:request delegate:connDelegate startImmediately:NO];
+    [c setDelegateQueue:delegateQueue];
+    [c start];
+    
+    NSError *err = [connDelegate waitForResult];
+    if (err != nil) {
+        NSLog(@"request got an error response %@", err);
+        @throw [NSException exceptionWithName:@"HTTP error" reason:@"Unable to make http request to server" userInfo:nil];
+    }
+    
+    NSData *respPayload = [connDelegate data];
+    //[NSURLConnection sendSynchronousRequest:request returningResponse:&resp error:&err];
 	//NSLog(@"response \r\n%@", [NSString stringWithCString:[respPayload bytes] length:[respPayload length]]);
 	zkElement *root = [zkParser parseData:respPayload];
-	if (root == nil)	
+    if (root == nil) {
+        NSLog(@"request send to %@\n%@\n", request.URL, payload);
+        NSLog(@"got unparsable response\n%@\n", [[[NSString alloc] initWithData:respPayload encoding:NSUTF8StringEncoding] autorelease]);
 		@throw [NSException exceptionWithName:@"Xml error" reason:@"Unable to parse XML returned by server" userInfo:nil];
-	if (![[root name] isEqualToString:@"Envelope"])
+    }
+    if (![[root name] isEqualToString:@"Envelope"]) {
+        NSLog(@"request send to %@\n%@\n", request.URL, payload);
+        NSLog(@"got unparsable response\n%@\n", [[[NSString alloc] initWithData:respPayload encoding:NSUTF8StringEncoding] autorelease]);
 		@throw [NSException exceptionWithName:@"Xml error" reason:[NSString stringWithFormat:@"response XML not valid SOAP, root element should be Envelope, but was %@", [root name]] userInfo:nil];
+    }
 	if (![[root namespace] isEqualToString:SOAP_NS])
 		@throw [NSException exceptionWithName:@"Xml error" reason:[NSString stringWithFormat:@"response XML not valid SOAP, root namespace should be %@ but was %@", SOAP_NS, [root namespace]] userInfo:nil];
 	zkElement *body = [root childElement:@"Body" ns:SOAP_NS];
@@ -68,6 +102,72 @@ static NSString *SOAP_NS = @"http://schemas.xmlsoap.org/soap/envelope/";
 		@throw [ZKSoapException exceptionWithFaultCode:fc faultString:fm];
 	}
 	return returnRoot ? root : [[body childElements] objectAtIndex:0];
+}
+
+@end
+
+
+@implementation ConnectionDelegate
+
+-(id)init {
+    self = [super init];
+    data = [[NSMutableData dataWithCapacity:4096] retain];
+    lock = [[NSConditionLock alloc] initWithCondition:0];
+    return self;
+}
+
+-(void)dealloc {
+    [data release];
+    [lock release];
+    [err release];
+    [super dealloc];
+}
+
+-(NSError *)waitForResult {
+    [lock lockWhenCondition:1];
+    NSError *ret = [err autorelease];
+    [lock unlock];
+    return ret;
+}
+
+// only valid after you've called waitForResult
+-(NSData *)data {
+    return [data copy];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)d {
+    [lock lock];
+    [data appendData:d];
+    [lock unlockWithCondition:0];
+}
+
+- (NSURLRequest *)connection:(NSURLConnection *)connection
+             willSendRequest:(NSURLRequest *)request
+            redirectResponse:(NSURLResponse *)response {
+
+    NSLog(@"NSURLConnection: willSendRequest %@ %@\n", [request HTTPMethod], [[request URL] absoluteString]);
+    if (response != nil) {
+        NSLog(@"redirect received from server %@\n", response);
+        NSHTTPURLResponse *hr = (NSHTTPURLResponse *)response;
+        NSLog(@"statusCode %ld headers %@\n",[hr statusCode], [hr allHeaderFields]);
+    }
+    return request;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    NSHTTPURLResponse *hr = (NSHTTPURLResponse *)response;
+    NSLog(@"didRecvResponse statusCode %ld\nheaders %@\n",[hr statusCode], [hr allHeaderFields]);
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)e {
+    [lock lock];
+    err = [e retain];
+    [lock unlockWithCondition:1];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    [lock lock];
+    [lock unlockWithCondition:1];
 }
 
 @end
