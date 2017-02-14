@@ -57,7 +57,8 @@ static NSOperationQueue *delegateQueue;
 	[request setHTTPMethod:@"POST"];
 	[request addValue:@"text/xml; charset=UTF-8" forHTTPHeaderField:@"content-type"];	
 	[request addValue:@"\"\"" forHTTPHeaderField:@"SOAPAction"];
-	
+    [request setHTTPShouldHandleCookies:NO];
+    
 	NSData *data = [payload dataUsingEncoding:NSUTF8StringEncoding];
 	[request setHTTPBody:data];
 	
