@@ -223,7 +223,7 @@
 		F4C30D3F19382F4A00C377F1 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = F4C30D3E19382F4A00C377F1 /* dsa_pub.pem */; };
 		F4D77E5C1285030C00704EE4 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D77E5B1285030C00704EE4 /* libxml2.2.dylib */; };
 		F4F09D4A0B686E2C00C972C4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F09D490B686E2C00C972C4 /* Sparkle.framework */; };
-		F4F09D650B686E5100C972C4 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F4F09D490B686E2C00C972C4 /* Sparkle.framework */; };
+		F4F09D650B686E5100C972C4 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F4F09D490B686E2C00C972C4 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		F4F09D6C0B6871F800C972C4 /* NewCredentialsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F09D6A0B6871F800C972C4 /* NewCredentialsController.m */; };
 		F4F09DB20B69175500C972C4 /* td.icns in Resources */ = {isa = PBXBuildFile; fileRef = F4F09DB10B69175500C972C4 /* td.icns */; };
 		F4F09E010B69B73300C972C4 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = F4F09E000B69B73300C972C4 /* Credits.html */; };
@@ -1233,7 +1233,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0820;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "trapdoor" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1509,7 +1509,6 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -1524,6 +1523,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pocketsoap.trapdoor;
 				PRODUCT_NAME = Trapdoor;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
@@ -1534,7 +1534,6 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1547,6 +1546,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pocketsoap.trapdoor;
 				PRODUCT_NAME = Trapdoor;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
@@ -1556,30 +1556,60 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = trapdoor_Prefix.pch;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "";
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = trapdoor_Prefix.pch;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				PRODUCT_NAME = Trapdoor;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
