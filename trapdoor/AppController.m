@@ -26,15 +26,14 @@
 
 #import "AppController.h"
 #import "Credential.h"
-#import "zkSforceClient.h"
-#import "zkDescribeSObject.h"
-#import "zkSoapException.h"
+#import "ZKSforceClient.h"
+#import "ZKSoapException.h"
 #import "NewPasswordController.h"
 #import "Browser.h"
 #import "BrowserSetting.h"
-#import "zkLoginResult.h"
-#import "zkUserInfo.h"
-#import "zkParser.h"
+#import "ZKLoginResult.h"
+#import "ZKUserInfo.h"
+#import "ZKParser.h"
 
 NSString *prodUrl = @"https://www.salesforce.com";
 NSString *testUrl = @"https://test.salesforce.com";
@@ -113,37 +112,9 @@ OSStatus keychainCallback (SecKeychainEvent keychainEvent, SecKeychainCallbackIn
 	return cid;
 }
 
-- (ZKDescribeSObject *)describeSomethingWithUrls:(ZKSforceClient *)sforce {
-	NSArray *types = [sforce describeGlobal];
-	// try a custom object first
-	ZKDescribeGlobalSObject *type;
-	ZKDescribeSObject *desc;
-	desc = [sforce describeSObject:[[types lastObject] name]];
-	if ([[desc urlNew] length] > 0) return desc;
-	
-	NSMutableArray *typeNames = [NSMutableArray array];
-	for (type in types)
-		[typeNames addObject:[type name]];
-	
-	// try some major entities we know should have urls
-	NSArray *toTry = [NSArray arrayWithObjects:@"Event", @"Task", @"Product2", @"Contact", @"OpportunityLineItem", @"Opportunity", @"Lead", @"Account", nil];
-	for (NSString *typeToTry in toTry) {
-		if ([typeNames containsObject:typeToTry]) {
-			desc = [sforce describeSObject:typeToTry];
-			if ([[desc urlNew] length] > 0) return desc;
-		}
-	}
-	// what, still no luck? grrh, brute force that sucker
-	for (type in types) {
-		desc = [sforce describeSObject:[type name]];
-		if ([[desc urlNew] length] > 0) return desc;
-	}
-	return nil;
-}
-
 - (ZKSforceClient *)clientForServer:(NSString *)server {
 	ZKSforceClient *sforce = [[[ZKSforceClient alloc] init] autorelease];
-	[sforce setLoginProtocolAndHost:server andVersion:17];
+	[sforce setLoginProtocolAndHost:server];
 	[sforce setClientId:[self clientId]];
 	return sforce;
 }
@@ -154,12 +125,7 @@ OSStatus keychainCallback (SecKeychainEvent keychainEvent, SecKeychainCallbackIn
 }
 
 - (void)launchSalesforceForClient:(ZKSforceClient *)sforce andCredential:(Credential *)credential {
-	[sforce setCacheDescribes:YES];
-	ZKDescribeSObject *desc = [self describeSomethingWithUrls:sforce];
-	NSString *sUrl = desc != nil ? [desc urlNew] : [sforce serverUrl];
-	NSURL *url = [NSURL URLWithString:sUrl];
-	NSURL *fd  = [NSURL URLWithString:[NSString stringWithFormat:@"/secur/frontdoor.jsp?sid=%@", [sforce sessionId]] relativeToURL:url];
-    NSLog(@"final url: %@",url);
+	NSURL *fd  = [NSURL URLWithString:[NSString stringWithFormat:@"/secur/frontdoor.jsp?sid=%@", [sforce sessionId]] relativeToURL:[sforce serverUrl]];
 	NSString *bundleIdentifier = [[credential browser] bundleIdentifier];
 	if (bundleIdentifier == nil)
 		[[NSWorkspace sharedWorkspace] openURL:fd];
