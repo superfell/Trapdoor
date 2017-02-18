@@ -26,8 +26,8 @@
 
 #import "NewCredentialsController.h"
 #import "AppController.h"
-#import "zkSforceClient.h"
-#import "zkSoapException.h"
+#import "ZKSforceClient.h"
+#import "ZKSoapException.h"
 #import "credential.h"
 #import "Browser.h"
 #import "BrowserSetting.h"
